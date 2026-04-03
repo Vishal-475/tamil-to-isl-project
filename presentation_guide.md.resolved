@@ -1,0 +1,67 @@
+# Presentation Guide: Tamil Speech to ISL Translation System
+
+Here is a step-by-step technical breakdown of how the system works. You can use this guide to explain the architecture and workflow during your presentation tomorrow.
+
+---
+
+## Phase 1: Audio Recording (Frontend)
+1. **Microphone Access:** When the user clicks "Start Recording", the website requests microphone access using the browser's modern `navigator.mediaDevices.getUserMedia` API.
+2. **Raw Audio Encoding:** The application captures the live audio stream and uses a JavaScript library called **RecordRTC**. 
+3. **WAV Generation:** Unlike built-in browser recorders that generate compressed `.webm` files, RecordRTC safely encodes the raw acoustic data into a high-quality, 16kHz Mono **WAV file** (`audio/wav`) entirely inside the browser. This ensures the audio is pristine and strictly compatible with backend speech models without requiring external conversion tools like `ffmpeg`.
+4. **Data Transmission:** Once recording stops, the file is packaged and sent to the FastAPI backend via an asynchronous `POST` request.
+
+## Phase 2: Speech Recognition (Backend)
+1. **Receiving Data:** The FastAPI Python server receives the WAV file in the `/api/process-audio` endpoint.
+2. **Acoustic Parsing:** The backend utilizes the `speech_recognition` Python library to read the WAV file’s acoustic data.
+3. **Tamil Transcription:** The data is passed through Google's Speech-to-Text engine. By explicitly setting the language parameter to Tamil (`ta-IN`), the engine correctly identifies the phonemes and returns a raw **Tamil text string**.
+
+## Phase 3: Language Translation (Backend)
+1. **Machine Translation:** The system cannot map Tamil directly to English ISL datasets easily, so an intermediate translation step is used.
+2. **Processing:** The Tamil text string is piped into the `deep-translator` library.
+3. **Output:** The module processes the Tamil input and outputs the semantic equivalent as an **English sentence**.
+
+## Phase 4: NLP to ISL Grammar Conversion (Backend)
+*This is the core linguistic engine of the project. Indian Sign Language (ISL) has a specific Subject-Object-Verb (SOV) structure and does not use "filler" words.*
+
+1. **Tokenization:** Using the **NLTK (Natural Language Toolkit)**, the system breaks the English sentence down into an array of distinct words.
+2. **Stop-Word Filtering:** The script intelligently removes grammatical "stop words" that have no physical sign equivalent. This includes:
+   - Articles (*a, an, the*)
+   - Prepositions and Conjunctions (*to, and*)
+   - Auxiliary / "Be" Verbs (*am, is, are, was, were*)
+   *Note: Pronouns like "I", "He", "They" are preserved.*
+3. **Lemmatization:** The system uses NLTK's `WordNetLemmatizer` to analyze the grammatical tense of the remaining verbs and reverts them to their absolute root dictionary form (e.g., "going" becomes "go", "played" becomes "play").
+4. **ISL Gloss Generation:** The final filtered root words are capitalized to form the standard ISL sequence (e.g., "I am going to school" $\to$ `"I" "GO" "SCHOOL"`).
+
+## Phase 5: Video Mapping & Playback (Frontend Sequence)
+1. **Directory Search:** For every finalized ISL word, the FastAPI server searches your local storage to find the corresponding sign sequence. It searches in priority:
+   - First, it checks `ISL_Dataset/` (your custom real-world footage).
+   - Second, it falls back to [dataset/](file:///d:/SRM%20Notes/SEM6/Minor%20Project%20V2/dataset/mock_generator.py#52-60) (the generated mockup videos).
+2. **Payload Delivery:** The backend sends a JSON payload back to the browser containing the Tamil text, the English translation, and the exact URLs of the video files it located.
+3. **Dynamic Stitching:** The frontend JavaScript receives this array and loads the dynamic UI. It extracts the video URLs and plays them sequentially inside the HTML5 `<video>` player. It uses JavaScript [onended](file:///d:/SRM%20Notes/SEM6/Minor%20Project%20V2/frontend/app.js#247-251) events to instantly load the next video the millisecond the previous one finishes, creating a smooth, continuous signing illusion.
+4. **Fingerspelling Fallback:** If a spoken word does not exist in any dataset folder, the frontend gracefully handles the error by pausing the video feed and rendering a 1.5-second text overlay of the missing word, effectively simulating manual fingerspelling.
+
+---
+
+## How to Run the Project (Live Demo Instructions)
+
+Follow these steps exactly to start the application on your computer:
+
+**1. Open your terminal in the project folder:**
+Open VS Code (or PowerShell) and ensure your terminal is currently pointing to `d:\SRM Notes\SEM6\Minor Project V2`.
+
+**2. Start the Backend Server:**
+Run the following exact command to boot the FastAPI python server. This command sets the correct python path and starts the API on port 8000.
+```powershell
+$env:PYTHONPATH="d:\SRM Notes\SEM6\Minor Project V2"
+cd backend
+python -m uvicorn main:app --host 127.0.0.1 --port 8000
+```
+
+**3. Open the Frontend Application:**
+Leave the terminal running in the background. Open Google Chrome or Microsoft Edge and navigate to:
+[http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+**4. Start Translating!**
+Click "Start Recording", speak a Tamil phrase (e.g., "Naan pallikku selgiren"), and hit "Stop Recording". The application will automatically process and render the output.
+
+*(Note: Custom sign videos should be placed in the `ISL_Dataset` folder, named in lowercase English matching the root word, e.g., `school.mp4`).*

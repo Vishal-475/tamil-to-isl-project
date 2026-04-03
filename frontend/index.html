@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamil Speech to ISL Translation</title>
+    <link rel="stylesheet" href="style.css?v=3">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-hands-asl-interpreting"></i>
+            <h1>Tamil Speech to ISL</h1>
+        </div>
+        <div class="lang-indicator">
+            <span class="active">தமிழ் (TA)</span>
+            <i class="fa-solid fa-arrow-right"></i>
+            <span>ISL</span>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Input Section -->
+        <section class="panel input-panel">
+            <h2><i class="fa-solid fa-microphone"></i> Provide Input</h2>
+
+            <div class="input-actions">
+                <button id="recordBtn" class="primary-btn">
+                    <i class="fa-solid fa-microphone"></i> Start Recording
+                </button>
+
+                <div class="divider"><span>OR</span></div>
+
+                <label for="audioUpload" class="upload-btn">
+                    <i class="fa-solid fa-upload"></i> Upload Audio (.wav, .mp3)
+                </label>
+                <input type="file" id="audioUpload" accept="audio/wav, audio/mpeg" hidden>
+            </div>
+
+            <div class="status-container hidden" id="recordingStatus">
+                <div class="waveform">
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <p>Listening to Tamil speech...</p>
+            </div>
+
+            <div class="status-container hidden" id="uploadStatus">
+                <i class="fa-solid fa-file-audio fa-2x"></i>
+                <p id="fileName">test_audio.wav</p>
+                <button id="processBtn" class="action-btn">Process File</button>
+            </div>
+
+            <!-- Loader -->
+            <div class="loader-container hidden" id="processingLoader">
+                <div class="spinner"></div>
+                <p id="loaderText">Processing audio via FastAPI...</p>
+            </div>
+
+            <!-- Error message -->
+            <div class="error-msg hidden" id="errorMsg">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span id="errorText">Error processing audio.</span>
+            </div>
+        </section>
+
+        <!-- Processing Pipeline Section -->
+        <section class="panel processing-panel">
+            <h2><i class="fa-solid fa-gears"></i> Translation Pipeline</h2>
+
+            <div class="pipeline-step">
+                <div class="step-icon"><i class="fa-solid fa-comment"></i></div>
+                <div class="step-content">
+                    <h3>Tamil Text</h3>
+                    <p id="tamilOutput" class="output-text placeholder">Awaiting input...</p>
+                </div>
+            </div>
+
+            <div class="pipeline-step">
+                <div class="step-icon"><i class="fa-solid fa-language"></i></div>
+                <div class="step-content">
+                    <h3>English Translation</h3>
+                    <p id="englishOutput" class="output-text placeholder">Awaiting translation...</p>
+                </div>
+            </div>
+
+            <div class="pipeline-step highlight-step">
+                <div class="step-icon"><i class="fa-solid fa-spell-check"></i></div>
+                <div class="step-content">
+                    <h3>ISL Grammar Conversion</h3>
+                    <div id="islOutput" class="isl-tags">
+                        <span class="placeholder-tag">Wait...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Output Video Section -->
+        <section class="panel output-panel">
+            <h2><i class="fa-solid fa-video"></i> Sign Language Render</h2>
+
+            <div class="media-wrapper">
+                <div class="video-container">
+                    <video id="islVideoPlayer" muted playsinline>
+                        <!-- Fallback placeholder when no video -->
+                    </video>
+                    <div id="videoPlaceholder" class="video-placeholder">
+                        <i class="fa-regular fa-image fa-3x"></i>
+                        <p>Processed sequence will play here</p>
+                    </div>
+
+                    <!-- Current playing word overlay -->
+                    <div id="currentWordOverlay" class="word-overlay hidden">GO</div>
+                </div>
+
+                <div id="avatarContainer" class="avatar-container hidden">
+                    <div class="avatar-character">
+                        <img id="avatarImage" src="avatar.png" alt="2D Indian Sign Language Avatar Placeholder"
+                            style="width:100%; max-height:100%; object-fit:contain; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));" />
+                    </div>
+                    <div class="avatar-status">✨ Live 2D Translation</div>
+                </div>
+            </div>
+
+            <div class="video-controls disabled" id="videoControls">
+                <button id="replayBtn" title="Replay Sequence"><i class="fa-solid fa-rotate-left"></i></button>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span id="sequenceCounter">0 / 0</span>
+            </div>
+
+            <div id="missingWordWarning" class="warning-msg hidden">
+                <i class="fa-solid fa-circle-info"></i> Fallback: Fingerspelling triggered for missing words.
+            </div>
+
+            <!-- Latency Metrics -->
+            <div id="latencyDisplay" class="latency-metrics hidden">
+                <div class="metric">
+                    <span class="metric-label"><i class="fa-solid fa-stopwatch"></i> End-to-End Latency:</span>
+                    <span id="e2eLatencyValue" class="metric-value">-</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label"><i class="fa-solid fa-gauge-high"></i> Avg Latency/Word:</span>
+                    <span id="avgLatencyValue" class="metric-value">-</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- RecordRTC for pure WAV capture without FFMPEG -->
+    <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
+    <script src="app.js?v=3"></script>
+</body>
+
+</html>

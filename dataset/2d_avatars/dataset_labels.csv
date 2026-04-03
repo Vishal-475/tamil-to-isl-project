@@ -1,0 +1,26 @@
+word_id,isl_word,image_file,description
+1,I,avatar_i.png,Right hand pointing to chest
+2,GO,avatar_go.png,Right hand pointing forward
+3,SCHOOL,avatar_school.png,Both hands clapping
+4,HELLO,avatar_hello.png,Right hand waving
+5,THANK_YOU,avatar_thank_you.png,Namaste gesture
+6,NAME,avatar_name.png,Right index finger on chin
+7,MY,avatar_my.png,Right hand flat on chest
+8,YOU,avatar_you.png,Right hand pointing forward at viewer
+9,LOVE,avatar_love.png,Hands crossed over chest
+10,PLEASE,avatar_please.png,Right hand flat on chest
+11,YES,avatar_yes.png,Right hand thumbs up
+12,NO,avatar_no.png,Right index finger wagging
+13,GOOD,avatar_good.png,Right thumb up on left palm
+14,MORNING,avatar_morning.png,Right hand rising from left arm
+15,HELP,avatar_help.png,Right fist on left palm
+16,WATER,avatar_water.png,Right hand W shape on chin
+17,FRIEND,avatar_friend.png,Index fingers hooked together
+18,TEACHER,avatar_teacher.png,Both hands pinched framing face
+19,LEARN,avatar_learn.png,Right hand gracefully touching forehead
+20,EAT,avatar_eat.png,Right hand directly touching lips
+21,SLEEP,avatar_sleep.png,Right palm flat resting on tilted head
+22,HAPPY,avatar_happy.png,Both hands flat against chest upward
+23,SAD,avatar_sad.png,Right hand fingers gently on cheek
+24,MOTHER,avatar_mother.png,Right index and middle pointing to chin
+25,FATHER,avatar_father.png,Right index and thumb resting on chin

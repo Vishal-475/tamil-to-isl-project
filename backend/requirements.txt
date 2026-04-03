@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+SpeechRecognition
+deep-translator
+nltk
+python-multipart
+pydub
+opencv-python
+numpy
