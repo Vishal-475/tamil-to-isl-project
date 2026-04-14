@@ -4,7 +4,14 @@ import os
 from pathlib import Path
 
 # Words to generate mock signs for
-WORDS = ["i", "go", "school", "hello", "thank_you", "name", "my", "you", "love", "please", "yes", "no", "good", "morning", "help", "water", "friend", "teacher", "learn", "eat", "sleep", "happy", "sad", "mother", "father"]
+WORDS = [
+    "i", "go", "school", "hello", "thank_you", "name", "my", "you", "love", "please", "yes", "no", 
+    "good", "morning", "help", "water", "friend", "teacher", "learn", "eat", "sleep", "happy", "sad", 
+    "mother", "father",
+    "beautiful", "change", "college", "computer", "day", "distance", "engineer", "fight", "finish", 
+    "great", "home", "language", "laugh", "see", "sign", "sing", "sound", "stay", "study", "talk", 
+    "television", "time", "walk", "wash", "work"
+]
 
 # Colors for different words
 COLORS = [
@@ -55,6 +62,9 @@ def generate_dataset():
     
     for i, word in enumerate(WORDS):
         output_path = base_dir / f"{word}.mp4"
+        if output_path.exists():
+            print(f"Skipping {word}, already exists.")
+            continue
         color = COLORS[i % len(COLORS)]
         create_mock_video(word, output_path, color)
         

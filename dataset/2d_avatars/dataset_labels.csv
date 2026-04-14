@@ -24,3 +24,28 @@ word_id,isl_word,image_file,description
 23,SAD,avatar_sad.png,Right hand fingers gently on cheek
 24,MOTHER,avatar_mother.png,Right index and middle pointing to chin
 25,FATHER,avatar_father.png,Right index and thumb resting on chin
+26,BEAUTIFUL,avatar_beautiful.png,Right hand circling face
+27,CHANGE,avatar_change.png,Both hands twisting
+28,COLLEGE,avatar_college.png,Right palm tapping left palm
+29,COMPUTER,avatar_computer.png,Both hands typing gesture
+30,DAY,avatar_day.png,Right arm arching over left
+31,DISTANCE,avatar_distance.png,Right hand moving away
+32,ENGINEER,avatar_engineer.png,Both thumbs tapping
+33,FIGHT,avatar_fight.png,Both fists crossing
+34,FINISH,avatar_finish.png,Both hands waving out
+35,GREAT,avatar_great.png,Both hands thumbs up
+36,HOME,avatar_home.png,Fingers touching to form roof
+37,LANGUAGE,avatar_language.png,Both L shape hands moving apart
+38,LAUGH,avatar_laugh.png,Both hands waving at face
+39,SEE,avatar_see.png,V shape fingers from eyes
+40,SIGN,avatar_sign.png,Index fingers circling each other
+41,SING,avatar_sing.png,Right hand gently waving away
+42,SOUND,avatar_sound.png,Index finger touching ear
+43,STAY,avatar_stay.png,Right hand pushing down
+44,STUDY,avatar_study.png,Right fingers wiggling over left palm
+45,TALK,avatar_talk.png,Index finger near mouth
+46,TELEVISION,avatar_television.png,Both hands shaping a box
+47,TIME,avatar_time.png,Right index tapping left wrist
+48,WALK,avatar_walk.png,Both hands alternating forward
+49,WASH,avatar_wash.png,Both hands rubbing together
+50,WORK,avatar_work.png,Right fist tapping left fist
