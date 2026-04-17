@@ -54,3 +54,8 @@ word_id,isl_word,image_file,description
 53,WHEN,avatar_when.png,Right index finger tracing circle over left index
 54,WHERE,avatar_where.png,Right index finger pointing up waving side to side
 55,WHY,avatar_why.png,Right middle finger fluttering downwards
+56,WHO,avatar_who.png,Right index finger circling around nose
+57,WHICH,avatar_which.png,Both hands with thumbs up alternating up and down
+58,CAN,avatar_can.png,Both fists moving downwards firmly
+59,CANNOT,avatar_cannot.png,Right index finger striking down over left index finger
+60,WELCOME,avatar_welcome.png,Right hand gesturing broadly inwards towards chest
