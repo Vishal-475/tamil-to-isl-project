@@ -11,7 +11,8 @@ WORDS = [
     "beautiful", "change", "college", "computer", "day", "distance", "engineer", "fight", "finish", 
     "great", "home", "language", "laugh", "see", "sign", "sing", "sound", "stay", "study", "talk", 
     "television", "time", "walk", "wash", "work",
-    "how", "what", "when", "where", "why", "who", "which", "can", "cannot", "welcome"
+    "how", "what", "when", "where", "why", "who", "which", "can", "cannot", "welcome",
+    "after", "again", "all", "alone", "ask", "best", "better", "busy", "but", "bye", "come", "do", "god", "keep", "more"
 ]
 
 # Colors for different words
