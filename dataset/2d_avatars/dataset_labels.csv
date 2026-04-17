@@ -49,3 +49,8 @@ word_id,isl_word,image_file,description
 48,WALK,avatar_walk.png,Both hands alternating forward
 49,WASH,avatar_wash.png,Both hands rubbing together
 50,WORK,avatar_work.png,Right fist tapping left fist
+51,HOW,avatar_how.png,Both hands curling fingers back and forth
+52,WHAT,avatar_what.png,Both hands with palms facing upward moving side to side
+53,WHEN,avatar_when.png,Right index finger tracing circle over left index
+54,WHERE,avatar_where.png,Right index finger pointing up waving side to side
+55,WHY,avatar_why.png,Right middle finger fluttering downwards

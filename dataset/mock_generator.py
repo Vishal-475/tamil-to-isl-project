@@ -10,7 +10,8 @@ WORDS = [
     "mother", "father",
     "beautiful", "change", "college", "computer", "day", "distance", "engineer", "fight", "finish", 
     "great", "home", "language", "laugh", "see", "sign", "sing", "sound", "stay", "study", "talk", 
-    "television", "time", "walk", "wash", "work"
+    "television", "time", "walk", "wash", "work",
+    "how", "what", "when", "where", "why"
 ]
 
 # Colors for different words
