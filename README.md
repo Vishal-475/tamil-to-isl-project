@@ -30,7 +30,7 @@ project_root/
     └── mock_generator.py       # Script to generate dummy signs for testing
 ```
 
-## Setup Instructions
+## Setup Instructions 
 
 ### 1. Prerequisites
 Ensure you have Python 3.9+ installed and pip available.
