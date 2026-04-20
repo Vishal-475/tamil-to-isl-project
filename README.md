@@ -32,7 +32,7 @@ project_root/
 
 ## Setup Instructions 
 
-### 1. Prerequisites
+### 1. Prerequisites 
 Ensure you have Python 3.9+ installed and pip available.
 
 ### 2. Install Dependencies
