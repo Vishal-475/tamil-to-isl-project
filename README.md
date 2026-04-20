@@ -5,7 +5,7 @@ A real-time translation system that takes Tamil speech (via microphone or file u
 This project uses a FastAPI backend for text processing and audio handling, and a lightweight Vanilla JS frontend for video playback and UI.
 
 ## Features
-- **Real-Time Recording**: Record Tamil speech directly from the browser.
+- **Real-Time  Recording**: Record Tamil speech directly from the browser.
 - **Audio Uploads**: Upload standard `.wav` or `.mp3` files for translation.
 - **Full NLP Pipeline**: Tamil Speech $\to$ Tamil Text $\to$ English Translation $\to$ ISL format conversion.
 - **Dynamic Video Stitching**: Maps processed ISL words directly to a local dataset folder and plays them smoothly in sequence.
