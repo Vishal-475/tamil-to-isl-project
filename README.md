@@ -1,4 +1,4 @@
-# Tamil Speech to ISL Translation System
+# Tamil Speech to ISL Translation  System
 
 A real-time translation system that takes Tamil speech (via microphone or file upload), translates it into English, converts the English text into an Indian Sign Language (ISL) grammatical structure, and dynamically plays back a sequence of corresponding sign language videos.
 
