@@ -2,7 +2,7 @@
 
 A real-time translation system that takes Tamil speech (via microphone or file upload), translates it into English, converts the English text into an Indian Sign Language (ISL) grammatical structure, and dynamically plays back a sequence of corresponding sign language videos.
 
-This project uses a FastAPI backend for text processing and audio handling, and a lightweight Vanilla JS frontend for video playback and UI.
+This project uses a FastAPI backend for text processing and audio handling, and a  lightweight Vanilla JS frontend for video playback and UI.
 
 ## Features
 - **Real-Time  Recording**: Record Tamil speech directly from the browser.
