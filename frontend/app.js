@@ -290,7 +290,7 @@ function playNextVideo() {
         avatarContainer.classList.add('signing');
 
         // Update 2D Avatar Sprite
-        avatarImage.src = `avatar_${currentItem.word.toLowerCase()}.png`;
+        avatarImage.src = `/api/avatar/${currentItem.word.toLowerCase()}`;
         avatarImage.onerror = function () { this.onerror = null; this.src = 'avatar.png'; };
 
         videoPlayer.src = currentItem.video_url;
@@ -313,7 +313,7 @@ function playNextVideo() {
         avatarContainer.classList.add('signing');
 
         // Update 2D Avatar Sprite
-        avatarImage.src = `avatar_${currentItem.word.toLowerCase()}.png`;
+        avatarImage.src = `/api/avatar/${currentItem.word.toLowerCase()}`;
         avatarImage.onerror = function () { this.onerror = null; this.src = 'avatar.png'; };
 
         setTimeout(() => {

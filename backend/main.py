@@ -9,6 +9,7 @@ import shutil
 import tempfile
 from pathlib import Path
 from pydub import AudioSegment
+from pydub.silence import split_on_silence
 import imageio_ffmpeg
 
 AudioSegment.converter = imageio_ffmpeg.get_ffmpeg_exe()
@@ -84,18 +85,57 @@ async def process_audio(file: UploadFile = File(...)):
             target_audio_path = temp_audio_path # Fallback to original
 
         try:
-            with sr.AudioFile(target_audio_path) as source:
-                audio_data = recognizer.record(source)
-
-            tamil_text = recognizer.recognize_google(audio_data, language="ta-IN")
-            print(f"Recognized Tamil: {tamil_text}")
-        except sr.UnknownValueError:
-            raise HTTPException(status_code=400, detail="Speech could not be understood.")
-        except sr.RequestError as e:
-            raise HTTPException(status_code=500, detail=f"Speech Recognition service error: {e}")
+            # We will use pydub to load the target audio natively
+            full_audio = AudioSegment.from_file(target_audio_path)
+            
+            # Split the audio on silence into chunks to bypass API payload limits
+            chunks = split_on_silence(
+                full_audio,
+                min_silence_len=500, # split on silences > 0.5 sec
+                silence_thresh=full_audio.dBFS - 16, # considering anything 16 dB below avg as silence
+                keep_silence=250 # retain some silence to avoid clipping words
+            )
+            
+            # Fallback for audios with absolutely no silence
+            if not chunks:
+               chunks = [full_audio]
+            
+            tamil_text_results = []
+            
+            for i, chunk in enumerate(chunks):
+                # Generate a temporary file path safely for Windows
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
+                    chunk_file_path = tmp_file.name
+                    
+                # Now that it's closed by the "with" block, we can export the chunk
+                chunk.export(chunk_file_path, format="wav")
+                
+                try:
+                    with sr.AudioFile(chunk_file_path) as source:
+                        audio_data = recognizer.record(source)
+                        
+                    chunk_text = recognizer.recognize_google(audio_data, language="ta-IN")
+                    tamil_text_results.append(chunk_text)
+                    print(f"Chunk {i} recognized: {chunk_text}")
+                except sr.UnknownValueError:
+                    print(f"Chunk {i}: Silence or incomprehensible speech. Skipping.")
+                except sr.RequestError as e:
+                    print(f"Chunk {i}: API Error - {e}")
+                finally:
+                    # Clean up chunk to save disk space
+                    if os.path.exists(chunk_file_path):
+                        os.remove(chunk_file_path)
+            
+            if not tamil_text_results:
+                raise HTTPException(status_code=400, detail="Speech could not be understood or audio contains no speech.")
+                
+            tamil_text = " ".join(tamil_text_results)
+            print(f"Fully Recognized Tamil: {tamil_text}")
+            
+        except HTTPException as he:
+            raise he
         except Exception as e:
-             # Fallback if audio file format issues occur
-             raise HTTPException(status_code=400, detail=f"Error processing audio format: {e}. Please use a standard WAV file.")
+             raise HTTPException(status_code=400, detail=f"Error processing audio content: {e}. Please use a standard audio format.")
 
         # 2. Translation (Tamil -> English)
         english_text = translator.translate(tamil_text)
@@ -160,6 +200,20 @@ async def get_video(word: str, source: str = "dummy"):
          return FileResponse(path=str(video_path), media_type="video/mp4")
     else:
          raise HTTPException(status_code=404, detail="Video not found in dataset")
+
+
+@app.get("/api/avatar/{word}")
+async def get_avatar(word: str):
+    """
+    Serves the 2D avatar image for a given ISL word.
+    """
+    word_clean = word.lower()
+    avatar_path = DATASET_DIR / "2d_avatars" / f"avatar_{word_clean}.png"
+    
+    if avatar_path.exists():
+         return FileResponse(path=str(avatar_path), media_type="image/png")
+    else:
+         raise HTTPException(status_code=404, detail="Avatar not found in dataset")
 
 
 # Mount static files for frontend (serves index.html and assets)
